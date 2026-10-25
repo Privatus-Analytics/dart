@@ -7,3 +7,5 @@ doc/api/
 SUBMISSION.md
 run-docker.sh
 .github/
+example/Dockerfile
+.dockerignore

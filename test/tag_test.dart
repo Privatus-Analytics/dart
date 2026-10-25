@@ -178,4 +178,53 @@ void main() {
     expect(tag(queueStub: true), contains('q:[]'));
     expect(tag(), isNot(contains('q:[]')));
   });
+
+  group('when the tag is off', () {
+    test('off with the queue stub on prints only the stub, with the nonce', () {
+      var called = false;
+      final html = tag(
+        config: PrivatusConfig(
+          siteId: 'pa_TEST123456',
+          enabled: false,
+          queueStub: true,
+          propsBuilder: (_) {
+            called = true;
+            return {'plan': 'pro'};
+          },
+        ),
+        nonce: 'abc',
+        props: {'role': 'admin'},
+      );
+      expect(html, '<script nonce="abc">$queueStubScript</script>');
+      expect(called, isFalse, reason: 'the props builder must not run');
+    });
+
+    test('off with the queue stub on and no nonce prints the bare stub', () {
+      expect(
+        tag(enabled: false, queueStub: true, props: {'plan': 'pro'}),
+        '<script>$queueStubScript</script>',
+      );
+    });
+
+    test('off with the queue stub off prints nothing', () {
+      expect(tag(enabled: false, queueStub: false, props: {'plan': 'pro'}), '');
+    });
+
+    test('no site id with the queue stub on prints only the stub', () {
+      configure(const PrivatusConfig(enabled: true));
+      expect(
+        tag(queueStub: true, nonce: 'abc', props: {'plan': 'pro'}),
+        '<script nonce="abc">$queueStubScript</script>',
+      );
+    });
+
+    test('the default environment gating counts as off', () {
+      configure(const PrivatusConfig(
+        siteId: 'pa_TEST123456',
+        environment: 'development',
+        queueStub: true,
+      ));
+      expect(tag(), '<script>$queueStubScript</script>');
+    });
+  });
 }

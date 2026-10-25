@@ -388,9 +388,10 @@ sends them once the tracker is ready:
 const PrivatusConfig(siteId: 'pa_YOURSITEID', queueStub: true)
 ```
 
-or for one page: `tag(queueStub: true)`. Like the tag, the stub prints only
-where the tag is on, so in development use
-`window.privatus && privatus.track(...)`.
+or for one page: `tag(queueStub: true)`. The stub prints even when the tag is
+off (in development, or with no site id). Then `tag()` prints only the stub,
+with no tracker, so your `privatus.track(...)` calls never fail. They wait in
+the list and are never sent.
 
 ### See the results
 
@@ -411,6 +412,15 @@ makes no network requests and never reads IP addresses or browser details.
 Keep people out of your props and event props: no names, emails or user ids.
 See the [privacy documentation](https://privatusanalytics.com/docs/privacy)
 for what is collected.
+
+If you have a privacy policy, it should say which tools handle your visitors' data. You can paste this:
+
+> This website uses [Privatus Analytics](https://privatusanalytics.com/privacy-analytics) to count visits. It
+> does not use cookies and does not follow you from one website to another. Your IP address is used for a moment
+> to count visits and is never stored.
+
+Change it to fit your site. The [privacy policy generator](https://privatusanalytics.com/tools/privacy-policy-generator)
+makes a longer version with your site's name in it.
 
 ## Development
 

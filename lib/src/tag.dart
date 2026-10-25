@@ -94,9 +94,16 @@ class PrivatusTag {
       'window.$pagePropsFunction=function(){return $json}';
 
   /// The HTML: the queue stub and page props scripts when wanted, then the
-  /// tracker tag, one per line. Empty when [shouldRender] is false.
+  /// tracker tag, one per line.
+  ///
+  /// When [shouldRender] is false (the tag is off or there is no site id),
+  /// prints only the queue stub when it is on, so `privatus.track` calls in
+  /// your own JavaScript queue up and never throw, and otherwise nothing. The
+  /// props builder is not called then.
   String toHtml() {
-    if (!shouldRender) return '';
+    if (!shouldRender) {
+      return config.queueStub ? _inlineScript(queueStubScript) : '';
+    }
 
     final json = pagePropsJsonText;
     return [
@@ -151,7 +158,8 @@ class PrivatusTag {
 /// passed to the props builder and [nonce] is your Content Security Policy
 /// nonce.
 ///
-/// Prints nothing without a site id or when the tag is not enabled.
+/// Without a site id or when the tag is not enabled, prints only the queue
+/// stub when [queueStub] is on, and otherwise nothing.
 String tag({
   PrivatusConfig? config,
   String? nonce,

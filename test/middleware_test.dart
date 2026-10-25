@@ -128,4 +128,13 @@ void main() {
     final fromCallback = await run(html(page), nonce: (_) => 'cb');
     expect(await fromCallback.readAsString(), contains('nonce="cb"'));
   });
+
+  test('inserts nothing when the tag is off, even with the queue stub on',
+      () async {
+    final response = await run(
+      html(page),
+      config: on.copyWith(enabled: false, queueStub: true),
+    );
+    expect(await response.readAsString(), page);
+  });
 }
