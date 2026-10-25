@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+*"]
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+      - run: dart pub get
+      - run: dart test
+      - run: dart analyze --fatal-infos
+
+  publish:
+    needs: test
+    permissions:
+      id-token: write # pub.dev checks this short-lived GitHub token. No secret is stored.
+    # The official reusable workflow from the Dart team. It runs
+    # `dart pub publish --force` with the GitHub OIDC token.
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      environment: pub.dev
