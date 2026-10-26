@@ -1,15 +1,5 @@
 # Changelog
 
-## Unreleased
-
-- When the tag is off (turned off, outside production by default, or no site
-  id), `tag()` with `queueStub` on now prints the queue stub alone, so
-  `privatus.track` calls never fail. It prints no tracker and no page props,
-  and does not call the props builder. With `queueStub` off it still prints
-  nothing.
-- `example/conformance.dart` and `example/Dockerfile`: the example app for the
-  conformance tests.
-
 ## 1.0.0 - 2026-10-25
 
 - Initial release.
@@ -27,3 +17,10 @@
 - `privatusMiddleware()` for shelf adds the tag to the head of HTML responses.
 - `injectTracker()` and `track()` for Flutter web and other Dart web apps.
   They do nothing off the web.
+- When the tag is off (turned off, outside production by default, or no site
+  id), `tag()` with `queueStub` on now prints the queue stub alone, so
+  `privatus.track` calls never fail. It prints no tracker and no page props,
+  and does not call the props builder. With `queueStub` off it still prints
+  nothing.
+- `example/conformance.dart` and `example/Dockerfile`: the example app for the
+  conformance tests.
